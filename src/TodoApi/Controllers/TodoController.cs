@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TodoApi.Models;
 
+
 namespace TodoApi.Controllers
 {
     [Route("api/[controller]")]
@@ -31,8 +32,30 @@ namespace TodoApi.Controllers
             return new ObjectResult(item);
         }
         #endregion
+
+
+        /// <summary>
+        /// Creates a TodoItem.
+        /// </summary>
+        /// <remarks>
+        /// Note that the key is a GUID and not an integer.
+        ///  
+        ///     POST /Todo
+        ///     {
+        ///        "key": "0e7ad584-7788-4ab1-95a6-ca0a5b444cbb",
+        ///        "name": "Item1",
+        ///        "isComplete": true
+        ///     }
+        /// 
+        /// </remarks>
+        /// <param name="item"></param>
+        /// <returns>New Created Todo Item</returns>
+        /// <response code="201">Returns the newly created item</response>
+        /// <response code="400">If the item is null</response>
         #region snippet_Create
         [HttpPost]
+        [ProducesResponseType(typeof(TodoItem), 201)]
+        [ProducesResponseType(typeof(TodoItem), 400)]
         public IActionResult Create([FromBody] TodoItem item)
         {
             if (item == null)
@@ -87,6 +110,10 @@ namespace TodoApi.Controllers
         #endregion
 
         #region snippet_Delete
+        /// <summary>
+        /// Deletes a specific TodoItem.
+        /// </summary>
+        /// <param name="id"></param>
         [HttpDelete("{id}")]
         public IActionResult Delete(string id)
         {

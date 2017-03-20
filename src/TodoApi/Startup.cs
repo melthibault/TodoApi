@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.PlatformAbstractions;
 using Swashbuckle.AspNetCore.Swagger;
+using System.IO;
 using TodoApi.Models;
 
 namespace TodoApi
@@ -46,6 +48,10 @@ namespace TodoApi
                     Contact = new Contact { Name = "Shayne Boyer", Email = "", Url = "http://twitter.com/spboyer" },
                     License = new License { Name = "Use under LICX", Url = "http://url.com" }
                 });
+                //Set the comments path for the swagger json and ui.
+                var basePath = PlatformServices.Default.Application.ApplicationBasePath;
+                var xmlPath = Path.Combine(basePath, "TodoApi.xml");
+                c.IncludeXmlComments(xmlPath);
             });
         }
         #endregion
@@ -57,7 +63,7 @@ namespace TodoApi
             loggerFactory.AddDebug();
 
             app.UseMvc();
-
+            app.UseStaticFiles();
             app.UseMvcWithDefaultRoute();
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
